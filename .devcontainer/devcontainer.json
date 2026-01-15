@@ -7,7 +7,7 @@
     "features": {
       "ghcr.io/devcontainers/features/docker-in-docker": {}
     },
-    "postCreateCommand": "sudo apt-get update && sudo apt-get install -y curl jq && curl -s https://get.k3d.io | bash && curl -LO \"https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\" && chmod +x kubectl && sudo mv kubectl /usr/local/bin/",
+    "postCreateCommand": "sudo apt-get update && sudo apt-get install -y curl jq && curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash && curl -LO \"https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\" && chmod +x kubectl && sudo mv kubectl /usr/local/bin/ && curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 && chmod 700 get_helm.sh && ./get_helm.sh && sudo chmod +x /usr/local/bin/helm && curl -sS https://webi.sh/k9s | sh && source ~/.config/envman/PATH.env && k3d cluster create dev --servers 1 --agents 1 -p \"8080:80@loadbalancer\"",
     "remoteUser": "vscode",
     "forwardPorts": [8080, 6443],
     "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
