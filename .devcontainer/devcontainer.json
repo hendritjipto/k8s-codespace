@@ -1,0 +1,15 @@
+{
+    "name": "k3d in Codespace (recommended)",
+    "build": {
+      "dockerfile": "dockerfile",
+      "context": ".."
+    },
+    "features": {
+      "ghcr.io/devcontainers/features/docker-in-docker": {}
+    },
+    "postCreateCommand": "sudo apt-get update && sudo apt-get install -y curl jq && curl -s https://get.k3d.io | bash && curl -LO \"https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\" && chmod +x kubectl && sudo mv kubectl /usr/local/bin/",
+    "remoteUser": "vscode",
+    "forwardPorts": [8080, 6443],
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+    "workspaceFolder": "/workspace"
+  }
