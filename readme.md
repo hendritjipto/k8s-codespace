@@ -7,7 +7,7 @@ This repository will show you on how to create kubernetes cluster quickly in cod
 - Open the terimal 
 - Run this command to create the k8s cluster
 ```shell
-k3d cluster create dev --servers 1 --agents 1 -p "8080:80@loadbalancer" 
+k3d cluster create dev --servers 1 --agents 1 -p "8080:3000@loadbalancer" 
 ```
 - To check/verify : 
 ```shell
@@ -25,3 +25,9 @@ k9s
 - ⚠️ Due to the limited resource allocated to codespace be mindful on adding multiple nodes 
 
 
+# 👾 Deploy the application to kubernetes
+- Build the image from Dockerfile on app folder 
+- Export image to k3d cluster
+```shell
+k3d image import workspace:latest -c dev
+```
