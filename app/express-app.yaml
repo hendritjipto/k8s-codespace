@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: express-app
+  namespace: production
 spec:
   replicas: 1
   selector:
@@ -14,7 +15,7 @@ spec:
     spec:
       containers:
       - name: express-app
-        image: workspace:latest
+        image: nodeapp:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
@@ -23,6 +24,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: express-app-service
+  namespace: production  
 spec:
   type: LoadBalancer
   ports:

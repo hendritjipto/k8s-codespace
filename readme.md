@@ -7,7 +7,7 @@ This repository will show you on how to create kubernetes cluster quickly in cod
 - Open the terimal 
 - Run this command to create the k8s cluster
 ```shell
-k3d cluster create dev --servers 1 --agents 1 -p "8080:3000@loadbalancer" 
+k3d cluster create k8s1 --servers 1 --agents 1 -p "8080:3000@loadbalancer" 
 ```
 - To check/verify : 
 ```shell
@@ -26,8 +26,27 @@ k9s
 
 
 # 👾 Deploy the application to kubernetes
-- Build the image from Dockerfile on app folder 
-- Export image to k3d cluster
-```shell
-k3d image import workspace:latest -c dev
+
+- Build the image from Dockerfile on app folder, specify the image name 
+
+    ```nodeapp:latest```
+
+- Export image to k3d cluster 
+
+    ```k3d image import nodeapp:latest -c dev```
+
+- Create a production namespace on kubernetes 
+
+    ```kubectl create namespace production```
+
+- Install the appplication to kubernetes. 
+    - Run this command ```kubectl apply -f app/express-app.yaml```
+
+- Install kubernetes helm monitoring
+    - Please change the ```<<REPLACE WITH GC TOKEN>>``` with the Grafana Cloud token
+
+```
+helm upgrade --install --rollback-on-failure --timeout 300s grafana-k8s-monitoring grafana/k8s-monitoring \
+  --namespace grafanacloud --create-namespace \
+  --values helm/definition.yaml
 ```
