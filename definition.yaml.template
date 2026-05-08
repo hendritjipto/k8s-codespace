@@ -1,0 +1,120 @@
+cluster:
+  name: k8s1
+destinations:
+  grafana-cloud-metrics:
+    type: prometheus
+    url: https://prometheus-prod-37-prod-ap-southeast-1.grafana.net./api/prom/push
+    auth:
+      type: basic
+      username: "${GRAFANA_CLOUD_METRICS_USERNAME}"
+      password: "${GRAFANA_CLOUD_METRICS_PASSWORD}"
+  grafana-cloud-logs:
+    type: loki
+    url: https://logs-prod-020.grafana.net./loki/api/v1/push
+    auth:
+      type: basic
+      username: "${GRAFANA_CLOUD_LOGS_USERNAME}"
+      password: "${GRAFANA_CLOUD_LOGS_PASSWORD}"
+  gc-otlp-endpoint:
+    type: otlp
+    url: https://otlp-gateway-prod-ap-southeast-1.grafana.net./otlp
+    protocol: http
+    auth:
+      type: basic
+      username: "${GC_OTLP_ENDPOINT_USERNAME}"
+      password: "${GC_OTLP_ENDPOINT_PASSWORD}"
+    metrics:
+      enabled: true
+    logs:
+      enabled: true
+    traces:
+      enabled: true
+  grafana-cloud-profiles:
+    type: pyroscope
+    url: https://profiles-prod-007.grafana.net.:443
+    auth:
+      type: basic
+      username: "${GRAFANA_CLOUD_PROFILES_USERNAME}"
+      password: "${GRAFANA_CLOUD_PROFILES_PASSWORD}"
+clusterMetrics:
+  enabled: true
+  collector: alloy-metrics
+hostMetrics:
+  enabled: true
+  collector: alloy-metrics
+  linuxHosts:
+    enabled: true
+  windowsHosts:
+    enabled: true
+  energyMetrics:
+    enabled: true
+clusterEvents:
+  enabled: true
+  collector: alloy-singleton
+podLogsViaLoki:
+  enabled: true
+  collector: alloy-logs
+applicationObservability:
+  enabled: true
+  collector: alloy-receiver
+  receivers:
+    otlp:
+      grpc:
+        enabled: true
+        port: 4317
+      http:
+        enabled: true
+        port: 4318
+    zipkin:
+      enabled: true
+      port: 9411
+autoInstrumentation:
+  enabled: true
+  collector: alloy-metrics
+  beyla:
+    deliverTracesToApplicationObservability: false
+    config:
+      data:
+        discovery:
+          instrument:
+            - k8s_namespace: production    
+profiling:
+  enabled: true
+  collector: alloy-profiles
+collectors:
+  alloy-metrics:
+    presets:
+      - clustered
+      - statefulset
+  alloy-singleton:
+    presets:
+      - singleton
+  alloy-logs:
+    presets:
+      - filesystem-log-reader
+      - daemonset
+  alloy-receiver:
+    presets:
+      - deployment
+  alloy-profiles:
+    presets:
+      - privileged
+      - daemonset
+collectorCommon:
+  alloy:
+    remoteConfig:
+      enabled: true
+      url: https://fleet-management-prod-013.grafana.net
+      auth:
+        type: basic
+        username: "${COLLECTOR_REMOTE_CONFIG_USERNAME}"
+        password: "${COLLECTOR_REMOTE_CONFIG_PASSWORD}"
+telemetryServices:
+  kube-state-metrics:
+    deploy: true
+  node-exporter:
+    deploy: true
+  windows-exporter:
+    deploy: true
+  kepler:
+    deploy: true
